@@ -1,8 +1,7 @@
-import { StoreHeader } from '@/components/ShopHeader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { categories, getCategoryBySlug, getProductsByCategory } from '@/lib/data'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/shop/category/$slug')({
     // In a loader
@@ -11,7 +10,7 @@ export const Route = createFileRoute('/shop/category/$slug')({
         const category = getCategoryBySlug(slug)
 
         if (!category) {
-            //notFound()
+            throw notFound()
         }
         const catId = category?.id || ""
         const products = getProductsByCategory(catId)
@@ -55,7 +54,7 @@ function CategoryPage() {
 
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {products.map((product) => (
-                        <Link key={product.id} to={`/product/${product.slug}`}>
+                        <Link key={product.id} to={`/shop/product/${product.slug}`}>
                             <Card className="group h-full transition-all hover:shadow-lg">
                                 <CardContent className="p-0">
                                     <div className="relative aspect-square overflow-hidden bg-secondary">
@@ -83,8 +82,8 @@ function CategoryPage() {
                     <h2 className="mb-8 text-2xl font-bold">Explore Other Categories</h2>
                     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         {otherCategories.map((cat) => (
-                            <Link key={cat.id} to={`/category/${cat.slug}`}>
-                                <Button variant="outline" className="h-auto w-full p-6 text-left bg-transparent">
+                            <Link key={cat.id} to={`/shop/category/${cat.slug}`}>
+                                <Button variant="outline" className="h-auto w-full p-6 text-left bg-transparent cursor-pointer">
                                     <div>
                                         <div className="mb-2 text-lg font-semibold">{cat.name}</div>
                                         <div className="text-sm text-muted-foreground">{cat.description}</div>

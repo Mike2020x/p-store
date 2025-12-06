@@ -22,10 +22,10 @@ export default function HomePage() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Button size="lg" asChild>
-              <Link to="/">Shop now</Link>
+              <Link to="/shop">Shop now</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link to="/">Browse categories</Link>
+              <Link to="#categories">Browse categories</Link>
             </Button>
           </div>
         </div>
