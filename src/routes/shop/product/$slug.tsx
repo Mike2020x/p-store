@@ -33,19 +33,29 @@ export const Route = createFileRoute('/shop/product/$slug')({
   component: RouteComponent,
 })
 
+// ... imports
+import { WompiCheckout } from '@/components/WompiCheckout'
+import { useState } from 'react'
+
+// ... existing code ...
+
 function RouteComponent() {
   const { category, product } = Route.useLoaderData()
+  const [reference] = useState(() => `ORD-${Date.now()}-${Math.random().toString(36).substring(7)}`)
+
+  // Calculate price in cents (assuming product.price is in COP)
+  const priceInCents = product.price * 100
+
   return (
     <div className="min-h-screen">
-
+      {/* ... existing breadcrumb and layout ... */}
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
         <div className="mb-8 flex items-center gap-2 text-sm text-muted-foreground">
           <Link to="/" className="hover:text-foreground">
             Home
           </Link>
           <span>/</span>
-          <Link to={`/shop/category/${category?.slug}`} className="hover:text-foreground">
+          <Link to={`/shop/category/${category?.slug}` as any} className="hover:text-foreground">
             {category?.name}
           </Link>
           <span>/</span>
@@ -115,9 +125,16 @@ function RouteComponent() {
             <div className="mt-auto space-y-4">
               {product.inStock ? (
                 <>
-                  <Button size="lg" className="w-full">
-                    Add to Bag
-                  </Button>
+                  <div className="w-full">
+                    <p className="mb-2 text-sm text-muted-foreground text-center">
+                      Pago seguro con Wompi
+                    </p>
+                    <WompiCheckout
+                      amountInCents={priceInCents}
+                      reference={reference}
+                      redirectUrl={`${import.meta.env.NEXT_PUBLIC_APP_URL || window.location.origin}/payment/result`}
+                    />
+                  </div>
                   <Button size="lg" variant="outline" className="w-full bg-transparent">
                     Add to Favorites
                   </Button>
